@@ -2,6 +2,7 @@
 set -eu
 
 REPO="${GITHUB_REPO:-huwenlong92/sdgate-nginx}"
+BIN_NAME="${BIN_NAME:-sdgate-nginx}"
 PREFIX="${PREFIX:-/usr/local}"
 VERSION="${VERSION:-latest}"
 GITHUB_PROXY="${GITHUB_PROXY:-${SDGATE_GITHUB_PROXY:-}}"
@@ -100,14 +101,14 @@ data_dir = "/var/lib/sdgate/data"
 
 [database]
 driver = "sqlite"
-path = "/var/lib/sdgate/sdgate.db"
+path = "/var/lib/sdgate/sdgate-nginx.db"
 TOML
 }
 
 write_builtin_service_template() {
   cat > "$1" <<'UNIT'
 [Unit]
-Description=SDKit Gate gateway manager
+Description=SDKit Gate visual Nginx configuration tool
 After=network-online.target
 Wants=network-online.target
 
@@ -180,7 +181,7 @@ else
     exit 1
   fi
 
-  ASSET="sdgate-${OS}-${ARCH}.tar.gz"
+  ASSET="${BIN_NAME}-${OS}-${ARCH}.tar.gz"
   URL="$(release_asset_url "$TAG" "$ASSET")"
 
   echo "[2/5] Downloading ${ASSET}"
@@ -192,14 +193,14 @@ else
     tar -xzf "$TMP_DIR/$ASSET" -C "$TMP_DIR"
   fi
 
-  BIN_PATH="$(find "$TMP_DIR" -type f -name sdgate | head -n 1)"
+  BIN_PATH="$(find "$TMP_DIR" -type f -name "$BIN_NAME" | head -n 1)"
   if [ -z "$BIN_PATH" ]; then
-    echo "sdgate binary not found in archive" >&2
+    echo "$BIN_NAME binary not found in archive" >&2
     exit 1
   fi
 fi
 
-BIN_DEST="$PREFIX/bin/sdgate"
+BIN_DEST="$PREFIX/bin/$BIN_NAME"
 
 echo "[4/5] Installing to ${BIN_DEST}"
 install -d "$PREFIX/bin"

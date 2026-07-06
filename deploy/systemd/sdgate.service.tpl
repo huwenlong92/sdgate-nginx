@@ -1,5 +1,5 @@
 [Unit]
-Description=SDKit Gate gateway manager
+Description=SDKit Gate visual Nginx configuration tool
 After=network-online.target
 Wants=network-online.target
 

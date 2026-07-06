@@ -1,6 +1,6 @@
 # SDKit Gate Release And Deploy
 
-SDKit Gate is an Nginx-only visual configuration tool for single-machine reverse proxy and site entry management.
+SDKit Gate is a visual Nginx configuration tool for single-machine reverse proxy and site entry management.
 
 This document is the public-facing release, install, upgrade, and packaging guide. The main project README is written in Chinese for local development and product context.
 
@@ -23,16 +23,16 @@ VERSION=0.1.0 curl -fsSL https://raw.githubusercontent.com/huwenlong92/sdgate-ng
 By default, the installer downloads the release asset matching the current OS and CPU architecture:
 
 ```text
-sdgate-darwin-arm64.tar.gz
-sdgate-darwin-amd64.tar.gz
-sdgate-linux-arm64.tar.gz
-sdgate-linux-amd64.tar.gz
+sdgate-nginx-darwin-arm64.tar.gz
+sdgate-nginx-darwin-amd64.tar.gz
+sdgate-nginx-linux-arm64.tar.gz
+sdgate-nginx-linux-amd64.tar.gz
 ```
 
 The binary is installed to:
 
 ```text
-/usr/local/bin/sdgate
+/usr/local/bin/sdgate-nginx
 ```
 
 Override the install prefix:
@@ -48,7 +48,7 @@ PREFIX=/opt/sdgate curl -fsSL https://raw.githubusercontent.com/huwenlong92/sdga
 Run SDKit Gate with the default local paths:
 
 ```bash
-sdgate
+sdgate-nginx
 ```
 
 Open the Web UI:
@@ -70,7 +70,7 @@ Default local runtime paths:
 ```text
 ~/.sdgate/
 ├── config.toml
-├── sdgate.db
+├── sdgate-nginx.db
 ├── data/
 └── logs/
 ```
@@ -88,7 +88,7 @@ curl -fsSL https://raw.githubusercontent.com/huwenlong92/sdgate-nginx/main/scrip
 
 With `INSTALL_SYSTEMD=1`, the installer:
 
-- installs `/usr/local/bin/sdgate`;
+- installs `/usr/local/bin/sdgate-nginx`;
 - creates `/etc/sdgate/config.toml` if it does not exist;
 - creates `/var/lib/sdgate`, `/var/lib/sdgate/data`, and `/var/log/sdgate`;
 - renders `/etc/systemd/system/sdgate.service`;
@@ -99,14 +99,14 @@ Existing files are preserved:
 
 ```text
 /etc/sdgate/config.toml
-/var/lib/sdgate/sdgate.db
+/var/lib/sdgate/sdgate-nginx.db
 ```
 
 Recommended systemd paths:
 
 ```text
 /etc/sdgate/config.toml
-/var/lib/sdgate/sdgate.db
+/var/lib/sdgate/sdgate-nginx.db
 /var/lib/sdgate/data/
 /var/log/sdgate
 ```
@@ -136,13 +136,13 @@ data_dir = "/var/lib/sdgate/data"
 
 [database]
 driver = "sqlite"
-path = "/var/lib/sdgate/sdgate.db"
+path = "/var/lib/sdgate/sdgate-nginx.db"
 ```
 
 Override config at startup:
 
 ```bash
-sdgate --config /etc/sdgate/config.toml --port 9100
+sdgate-nginx --config /etc/sdgate/config.toml --port 9100
 ```
 
 For reverse proxy deployment, use Nginx or another edge proxy in front of SDKit Gate and proxy traffic to `127.0.0.1:9100`.
@@ -172,7 +172,7 @@ Install from a local binary:
 
 ```bash
 sudo env \
-  SDGATE_BIN_PATH=/path/to/sdgate \
+  SDGATE_BIN_PATH=/path/to/sdgate-nginx \
   DEPLOY_DIR=/path/to/deploy \
   INSTALL_SYSTEMD=1 \
   scripts/install.sh
@@ -222,7 +222,7 @@ make run
 Build output:
 
 ```text
-target/release/sdgate
+target/release/sdgate-nginx
 static-dist/
 ```
 
@@ -279,7 +279,7 @@ SDKIT_RS_DIR=/path/to/sdkit-rs make release-linux
 Release tarballs contain:
 
 ```text
-sdgate
+sdgate-nginx
 README.md
 ```
 
@@ -317,4 +317,4 @@ make publish-readme
 - SDKit Gate manages its own Nginx configuration root and does not require modifying the user's existing system `nginx.conf`.
 - Existing external Nginx files are treated as read-only import sources.
 - Change the default admin password after first login.
-- Keep `/etc/sdgate/config.toml` and `/var/lib/sdgate/sdgate.db` during upgrades.
+- Keep `/etc/sdgate/config.toml` and `/var/lib/sdgate/sdgate-nginx.db` during upgrades.
