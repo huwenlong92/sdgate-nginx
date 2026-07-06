@@ -1,0 +1,18 @@
+# HTTP service port for Web UI and API.
+port = 9100
+
+# Runtime log directory.
+logs_dir = "/var/log/sdgate"
+
+# Managed local runtime data. Nginx config previews are rendered under this tree.
+data_dir = "/var/lib/sdgate/data"
+
+[database]
+# SQLite is the default single-machine database.
+driver = "sqlite"
+
+# SQLite belongs to application state data in production.
+path = "/var/lib/sdgate/sdgate.db"
+
+# Postgres connection is reserved for later.
+# url = "postgres://sdgate:password@127.0.0.1:5432/sdgate"
